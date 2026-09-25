@@ -64,7 +64,6 @@ public:
         pthread_mutex_unlock(&mtx);
 
     }
-
     int consume() {
         pthread_mutex_lock(&mtx);
         cout << "c_lock"<<endl;
