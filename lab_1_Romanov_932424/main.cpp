@@ -5,7 +5,6 @@
 
 
 using namespace std;
-int COUNT = 5;
 
 
 class Data_for_needs{
@@ -33,6 +32,7 @@ class Monitor_for_prog
     pthread_mutex_t mtx;
     pthread_cond_t cv;
     bool flag = false;
+    bool stop = false;
 public:
     Monitor_for_prog() {
         pthread_mutex_init(&mtx, nullptr);
@@ -64,20 +64,37 @@ public:
         pthread_mutex_unlock(&mtx);
 
     }
+
     int consume() {
         pthread_mutex_lock(&mtx);
         cout << "c_lock"<<endl;
-        while (!flag) {
+        while (!flag && !stop) {
             cout << "c wait, flag=0"<<endl;
             pthread_cond_wait(&cv, &mtx);
         }
         sleep(1);
+        if (stop)
+        {
+            pthread_mutex_unlock(&mtx);
+            return 0;
+        }
+        
+        
         int result = dat->get_val();
         cout << "get val: " << result<<endl;
+        delete dat; 
+        dat = nullptr;
         flag = false;
         cout << "c_unlock"<<endl<<endl;
         pthread_mutex_unlock(&mtx);
         return result;
+    }
+
+    void finish() {
+        pthread_mutex_lock(&mtx);
+        stop = true;
+        pthread_cond_broadcast(&cv); 
+        pthread_mutex_unlock(&mtx);
     }
 
 };  
@@ -85,10 +102,11 @@ static Monitor_for_prog monitor;
 
 //поставщик
 void* producer(void* arg){
-    for (size_t i = 0; i < COUNT; i++)
+    for (size_t i = 1; i <= COUNT; i++)
     {
         monitor.provide(i*10);
     }
+    monitor.finish();
     return nullptr;
 }
 
@@ -97,7 +115,10 @@ void* consumer(void* arg){
     for (size_t i = 0; i < COUNT; i++)
     {
         int result = monitor.consume();
-        cout << "-----------" << result << "-----------"<<endl<<endl;
+        if (result)
+        {
+            cout << "-" << result << "-"<<endl<<endl;
+        }
     }
     return nullptr;
 }
