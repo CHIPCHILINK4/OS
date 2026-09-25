@@ -93,7 +93,7 @@ public:
     void finish() {
         pthread_mutex_lock(&mtx);
         stop = true;
-        pthread_cond_broadcast(&cv); 
+        pthread_cond_signal(&cv); 
         pthread_mutex_unlock(&mtx);
     }
 
