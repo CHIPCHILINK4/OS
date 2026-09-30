@@ -5,6 +5,7 @@
 
 
 using namespace std;
+int COUNT = 5;
 
 
 class Data_for_needs{
@@ -64,6 +65,7 @@ public:
         pthread_mutex_unlock(&mtx);
 
     }
+    // 
     int consume() {
         pthread_mutex_lock(&mtx);
         cout << "c_lock"<<endl;
