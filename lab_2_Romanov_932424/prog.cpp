@@ -46,7 +46,6 @@ public:
         action.sa_flags = 0;
         sigaction(SIGHUP, &action, NULL);
         wait_mask = original_mask;
-        sigprocmask(SIG_BLOCK, &block_mask, &original_mask);
     }
 
     void restore() {
