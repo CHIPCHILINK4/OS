@@ -169,7 +169,7 @@ static const struct file_operations proc_file_ops = {
 static int __init tsulab_init(void) {
     unsigned int i;
 
-    pr_info("TSU Lab 4: Loading module\n");
+    pr_info("Welcome to the Tomsk State University\n");
 
     tsu_queue = alloc_workqueue("tsulab_queue", WQ_UNBOUND, 2);
     if (!tsu_queue) {
@@ -197,7 +197,7 @@ static int __init tsulab_init(void) {
 static void __exit tsulab_exit(void) {
     struct lab_work *item, *tmp;
 
-    pr_info("TSU Lab 4: Unloading module\n");
+    pr_info("TSU Lab 4: Unloading...\n");
 
     if (proc_file) {
         proc_remove(proc_file);
