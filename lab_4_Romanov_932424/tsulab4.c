@@ -218,7 +218,7 @@ static void __exit tsulab_exit(void) {
     destroy_workqueue(tsu_queue);
     pr_info("Workqueue destroyed\n");
 
-    pr_info("Module unloaded successfully\n");
+    pr_info("Tomsk State University forever!\n");
 }
 
 module_init(tsulab_init);
